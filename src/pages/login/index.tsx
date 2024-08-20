@@ -1,10 +1,12 @@
 import React from "react";
+import { Row, Col } from "antd";
 
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login Page</h1>
-    </div>
+    <Row justify={"center"}>
+      <Col>Gorsel</Col>
+      <Col>Login Inputlar</Col>
+    </Row>
   );
 };
 
