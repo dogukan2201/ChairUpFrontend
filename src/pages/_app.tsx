@@ -8,13 +8,13 @@ const { Header, Content, Footer } = Layout;
 const App = ({ Component, pageProps }: AppProps) => (
   <ConfigProvider>
     <Layout style={{ height: "100vh" }}>
-      <Header>
+      <Header style={{ backgroundColor: "green" }}>
         <AppHeader />
       </Header>
       <Content>
         <Component {...pageProps} />
       </Content>
-      <Footer>
+      <Footer style={{ backgroundColor: "green" }}>
         <AppFooter />
       </Footer>
     </Layout>
