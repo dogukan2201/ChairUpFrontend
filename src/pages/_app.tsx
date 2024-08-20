@@ -1,9 +1,8 @@
 import React from "react";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Layout } from "antd/lib";
 import type { AppProps } from "next/app";
-import { Layout } from "antd";
-import AppFooter from "@/components/appFooter";
-import AppHeader from "@/components/appHeader";
+import AppFooter from "@/components/AppFooter";
+import AppHeader from "@/components/AppHeader";
 const { Header, Content, Footer } = Layout;
 
 const App = ({ Component, pageProps }: AppProps) => (
