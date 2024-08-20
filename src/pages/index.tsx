@@ -1,11 +1,10 @@
-import { Inter } from "next/font/google";
+import React from "react";
+import { Button } from "antd";
 
-const inter = Inter({ subsets: ["latin"] });
+const Home = () => (
+  <div className="App">
+    <Button type="primary">Button</Button>
+  </div>
+);
 
-export default function Home() {
-  return (
-    <div>
-      <h1>Home</h1>
-    </div>
-  );
-}
+export default Home;
