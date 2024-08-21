@@ -11,7 +11,8 @@ import {
 } from "antd/lib";
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
-const { Text } = Typography;
+import { Divider } from "antd";
+const { Text, Title } = Typography;
 type LoginType = {
   username?: string;
   password?: string;
@@ -28,7 +29,9 @@ const LoginPage = () => {
   return (
     <Row style={{ height: "100%" }} align={"middle"}>
       <Col {...twoColumn} xs={0} sm={0}>
-        <Image src="/svg/loginImage.svg" preview={false} />
+        <Flex justify="center" align="center">
+          <Image src="/svg/loginImage3.svg" preview={false} width={600} />
+        </Flex>
       </Col>
       <Col {...twoColumn} xs={24} sm={24}>
         <Flex vertical align="center">
@@ -38,7 +41,7 @@ const LoginPage = () => {
             style={{ paddingBottom: "20px" }}
           >
             <Image src="/svg/logo1.svg" preview={false} width={60} />
-            <Text>ChairUp</Text>
+            <Title level={2}>ChairUp Login</Title>
           </Flex>
 
           <Form
