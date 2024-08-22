@@ -1,10 +1,13 @@
 import React from "react";
 import { Row, Col, Image, Flex, Avatar, Typography } from "antd/lib";
 import { twoColumn, oneColumn, threeColumn } from "@/config/bootstrap";
-const { Text, Link, Title } = Typography;
+const { Text, Title } = Typography;
 
+import { useAuth } from "@/context/AuthContext";
 const AppHeader: React.FC = () => {
-  //for user conditional rendering
+  const { user } = useAuth();
+  const fullName = user?.firstName.concat(" ", user?.lastName);
+
   return (
     <Row>
       <Col {...twoColumn}>
@@ -22,8 +25,12 @@ const AppHeader: React.FC = () => {
           justify="end"
           align="center"
         >
-          <Avatar size={"large"} src="/svg/user.svg" />
-          <Text style={{ color: "white" }}>Username</Text>
+          {user && (
+            <>
+              <Avatar size={"large"} src="/svg/user.svg" />
+              <Text style={{ color: "white" }}>{fullName}</Text>
+            </>
+          )}
         </Flex>
       </Col>
     </Row>

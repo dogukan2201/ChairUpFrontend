@@ -12,24 +12,33 @@ import {
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/context/AuthContext";
+
 const { Title } = Typography;
-type LoginType = {
+
+type SignUpType = {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
 
-const LoginPage = () => {
-  const { userLogin, user, loading } = useAuth();
+const SignUpPage = () => {
+  const { userSignUp, user, loading } = useAuth();
 
-  const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
+  const onSubmit: FormProps<SignUpType>["onFinish"] = async (values) => {
     try {
-      await userLogin(values.email, values.password);
+      await userSignUp(
+        values.firstName,
+        values.lastName,
+        values.email,
+        values.password
+      );
     } catch (error) {
       console.log("Error:", error);
     }
   };
 
-  const onFinishFailed: FormProps<LoginType>["onFinishFailed"] = (
+  const onFinishFailed: FormProps<SignUpType>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.log("Failed:", errorInfo);
@@ -39,7 +48,7 @@ const LoginPage = () => {
     <Row style={{ height: "100%" }} align={"middle"}>
       <Col {...twoColumn} xs={0} sm={0}>
         <Flex justify="center" align="center">
-          <Image src="/svg/loginImage3.svg" preview={false} width={600} />
+          <Image src="/svg/sign.svg" preview={false} width={600} />
         </Flex>
       </Col>
       <Col {...twoColumn} xs={24} sm={24}>
@@ -50,7 +59,7 @@ const LoginPage = () => {
             style={{ paddingBottom: "20px" }}
           >
             <Image src="/svg/logo1.svg" preview={false} width={60} />
-            <Title level={2}>ChairUp Login</Title>
+            <Title level={2}>ChairUp SignUp</Title>
           </Flex>
 
           <Form
@@ -60,7 +69,25 @@ const LoginPage = () => {
             onFinishFailed={onFinishFailed}
             style={{ width: "50%" }}
           >
-            <Form.Item<LoginType>
+            <Form.Item<SignUpType>
+              label="First Name:"
+              name="firstName"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<SignUpType>
+              label="Last Name:"
+              name="lastName"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<SignUpType>
               label="Email"
               name="email"
               rules={[
@@ -69,7 +96,7 @@ const LoginPage = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item<LoginType>
+            <Form.Item<SignUpType>
               label="Password"
               name="password"
               rules={[
@@ -87,7 +114,7 @@ const LoginPage = () => {
                   block
                   loading={loading}
                 >
-                  Login
+                  Sign Up
                 </Button>
               </Flex>
             </Form.Item>
@@ -98,4 +125,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
