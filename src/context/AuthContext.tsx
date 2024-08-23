@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import type {
   UserDataType,
   ProviderProps,
@@ -11,11 +11,22 @@ const initialValues = {
   userLogout: () => Promise.resolve(),
   userSignUp: () => Promise.resolve(),
 };
-const AuthContext = createContext<AuthContextType | null>(initialValues);
+
+const AuthContext = createContext<AuthContextType>(initialValues);
 
 export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("user");
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      setUser(userData);
+    } else {
+      console.log("User data not found in local storage");
+    }
+  }, []);
 
   const userLogin = async (email: string, password: string) => {
     try {
@@ -27,13 +38,24 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
         password: password,
       };
       setUser(simulatedUser);
+      localStorage.setItem("user", JSON.stringify(simulatedUser));
     } catch (error) {
       console.log("Error", error);
     } finally {
       setLoading(false);
     }
   };
-  const userLogout = async () => {};
+  const userLogout = async () => {
+    try {
+      setLoading(true);
+      localStorage.removeItem("user");
+      setUser(null);
+    } catch (error) {
+      console.log("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const userSignUp = async (
     firstName: string,
     lastName: string,
@@ -48,6 +70,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
         email: email,
         password: password,
       };
+      localStorage.setItem("user", JSON.stringify(simulatedUser));
       setUser(simulatedUser);
     } catch (error) {
       console.log("Error", error);
@@ -64,11 +87,3 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 };
 
 export default AuthContext;
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};

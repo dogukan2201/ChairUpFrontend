@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Row,
   Col,
@@ -11,7 +11,7 @@ import {
 } from "antd/lib";
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 const { Title } = Typography;
 
@@ -56,15 +56,32 @@ const SignUpPage = () => {
           <Flex
             justify="center"
             align="center"
-            style={{ paddingBottom: "20px" }}
+            style={{ alignItems: "center" }}
           >
-            <Image src="/svg/logo1.svg" preview={false} width={60} />
-            <Title level={2}>ChairUp SignUp</Title>
+            <Title
+              level={2}
+              style={{
+                color: "green",
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              SignUp
+              <span
+                style={{
+                  backgroundColor: "green",
+                  color: "white",
+                  borderRadius: "7px",
+                }}
+              >
+                ChairUp
+              </span>
+            </Title>
           </Flex>
 
           <Form
             layout="vertical"
-            name="loginForm"
+            name="signUpFrom"
             onFinish={onSubmit}
             onFinishFailed={onFinishFailed}
             style={{ width: "50%" }}
@@ -73,7 +90,7 @@ const SignUpPage = () => {
               label="First Name:"
               name="firstName"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: "Please input your first name!" },
               ]}
             >
               <Input />
@@ -82,22 +99,32 @@ const SignUpPage = () => {
               label="Last Name:"
               name="lastName"
               rules={[
-                { required: true, message: "Please input your username!" },
+                {
+                  required: true,
+                  message: "Please input your last name!",
+                },
               ]}
             >
               <Input />
             </Form.Item>
             <Form.Item<SignUpType>
-              label="Email"
+              label="Email:"
               name="email"
               rules={[
-                { required: true, message: "Please input your username!" },
+                {
+                  type: "email",
+                  message: "The input is not valid E-mail!",
+                },
+                {
+                  required: true,
+                  message: "Please input your E-mail!",
+                },
               ]}
             >
               <Input />
             </Form.Item>
             <Form.Item<SignUpType>
-              label="Password"
+              label="Password:"
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },

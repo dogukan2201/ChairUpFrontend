@@ -11,8 +11,9 @@ import {
 } from "antd/lib";
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
-import { useAuth } from "@/context/AuthContext";
-const { Title } = Typography;
+import { useAuth } from "@/hooks/useAuth";
+
+const { Title, Text } = Typography;
 type LoginType = {
   email: string;
   password: string;
@@ -49,8 +50,26 @@ const LoginPage = () => {
             align="center"
             style={{ paddingBottom: "20px" }}
           >
-            <Image src="/svg/logo1.svg" preview={false} width={60} />
-            <Title level={2}>ChairUp Login</Title>
+            <Title
+              level={2}
+              style={{
+                borderRadius: "15px",
+                width: "100%",
+                color: "green",
+                textAlign: "center",
+              }}
+            >
+              Login
+              <span
+                style={{
+                  backgroundColor: "green",
+                  color: "white",
+                  borderRadius: "7px",
+                }}
+              >
+                ChairUp
+              </span>
+            </Title>
           </Flex>
 
           <Form
