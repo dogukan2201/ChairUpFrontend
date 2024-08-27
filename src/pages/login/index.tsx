@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Row,
   Col,
@@ -13,7 +13,7 @@ import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/hooks/useAuth";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 type LoginType = {
   email: string;
   password: string;

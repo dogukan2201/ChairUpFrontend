@@ -1,10 +1,13 @@
-import React from "react";
-import { Button } from "antd/lib";
+import React, { useEffect } from "react";
 
-const Home = () => (
-  <div className="App">
-    <Button type="primary">Button</Button>
-  </div>
-);
+import { useAuth } from "@/hooks/useAuth";
+
+const Home = () => {
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    getUser();
+  }, []);
+  return <div className="App"></div>;
+};
 
 export default Home;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Row,
   Col,
@@ -12,7 +12,7 @@ import {
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/hooks/useAuth";
-
+import axiosInstance from "@/utils/axiosInstance";
 const { Title } = Typography;
 
 type SignUpType = {

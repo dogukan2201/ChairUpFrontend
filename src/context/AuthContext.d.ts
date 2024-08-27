@@ -16,6 +16,7 @@ export interface AuthContextType {
     password: string
   ) => Promise<void>;
   loading: boolean;
+  getUser: () => void;
 }
 export interface ProviderProps {
   children: React.ReactNode;
