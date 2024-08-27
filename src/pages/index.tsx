@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
 const Home = () => {
-  const { user, getUser } = useAuth();
+  const { getUser, user } = useAuth();
   useEffect(() => {
     getUser();
   }, []);
