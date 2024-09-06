@@ -3,7 +3,7 @@ import Card from "antd/lib/card/Card";
 import { useAuth } from "@/hooks/useAuth";
 import GoogleMaps from "@/components/GoogleMap";
 const Home = () => {
-  const { getUser, user } = useAuth();
+  const { getUser } = useAuth();
   useEffect(() => {
     getUser();
   }, []);

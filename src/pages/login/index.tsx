@@ -20,7 +20,7 @@ type LoginType = {
 };
 
 const LoginPage = () => {
-  const { userLogin, user, loading } = useAuth();
+  const { userLogin, loading } = useAuth();
 
   const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {

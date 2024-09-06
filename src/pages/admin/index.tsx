@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Button, Menu, Card } from "antd/lib";
+import { Menu, Card } from "antd/lib";
 import type { MenuProps } from "antd/lib";
-import { FiAlignJustify } from "react-icons/fi";
 import { FaUsers } from "react-icons/fa";
 import { HiArchiveBox } from "react-icons/hi2";
 import { FaBasketShopping } from "react-icons/fa6";
 import { PiCoffeeBeanFill } from "react-icons/pi";
+import UserTable from "@/components/Table/UserTable";
+import ProductTable from "@/components/Table/ProductTable";
+import OrderTable from "@/components/Table/OrderTable";
+import StockTable from "@/components/Table/StockTable";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -16,28 +19,26 @@ const items: MenuItem[] = [
   { key: "4", icon: <HiArchiveBox />, label: "Stock" },
 ];
 const adminPage = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+  const [current, setCurrent] = useState("1");
+  const onClick: MenuProps["onClick"] = (e) => {
+    setCurrent(e.key);
   };
-
   return (
-    <Card style={{ width: 256 }}>
-      <Button
-        type="primary"
-        onClick={toggleCollapsed}
-        style={{ marginBottom: 16, color: "white", backgroundColor: "green" }}
-      >
-        {collapsed ? <FiAlignJustify /> : <FiAlignJustify />}
-      </Button>
+    <Card style={{ width: "100%", height: "100%" }}>
       <Menu
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
-        mode="inline"
+        selectedKeys={[current]}
+        onClick={onClick}
+        mode="horizontal"
         theme="light"
-        inlineCollapsed={collapsed}
         items={items}
+        style={{ width: "100%", height: "100%" }}
       />
+      {current === "1" && <UserTable />}
+      {current === "2" && <OrderTable />}
+      {current === "3" && <ProductTable />}
+      {current === "4" && <StockTable />}
     </Card>
   );
 };
