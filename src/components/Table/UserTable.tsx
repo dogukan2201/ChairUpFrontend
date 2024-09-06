@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Space, Table, Button } from "antd/lib";
 import type { TableProps } from "antd/lib";
+import type { UserListType } from "@/context/AuthContext.d";
 
+import axiosInstance from "@/utils/axiosInstance";
 interface DataType {
   key: string;
   fullName: string;
@@ -32,25 +34,30 @@ const columns: TableProps<DataType>["columns"] = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    fullName: "John Brown",
-    email: "john@gmail.com",
-  },
-  {
-    key: "2",
-    fullName: "Jim Green",
-    email: "jim@gmail.com",
-  },
-  {
-    key: "3",
-    fullName: "Joe Black",
-    email: "joe@gmail.com",
-  },
-];
-
 const UserTable: React.FC = () => {
+  const [users, setUsers] = useState<UserListType[]>([]);
+
+  const getAllUsers = async () => {
+    try {
+      const response = await axiosInstance.get("/getAllUser");
+      if (response.data && response.data.users) {
+        setUsers(response.data.users);
+      }
+    } catch (error) {
+      console.error("Error fetching users", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const data: DataType[] = users.map((user: UserListType) => ({
+    key: user._id,
+    fullName: `${user.firstName} ${user.lastName}`,
+    email: user.email,
+  }));
+
   return (
     <Table
       columns={columns}

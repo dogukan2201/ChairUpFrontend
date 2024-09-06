@@ -9,6 +9,7 @@ import UserTable from "@/components/Table/UserTable";
 import ProductTable from "@/components/Table/ProductTable";
 import OrderTable from "@/components/Table/OrderTable";
 import StockTable from "@/components/Table/StockTable";
+import axiosInstance from "@/utils/axiosInstance";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -23,6 +24,7 @@ const adminPage = () => {
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
+
   return (
     <Card style={{ width: "100%", height: "100%" }}>
       <Menu

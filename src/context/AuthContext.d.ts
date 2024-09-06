@@ -4,6 +4,12 @@ export interface UserDataType {
   email: string;
   password: string;
 }
+export interface UserListType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 
 export interface AuthContextType {
   user: UserDataType | null;
