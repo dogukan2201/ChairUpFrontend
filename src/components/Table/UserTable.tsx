@@ -5,7 +5,8 @@ import type { UserListType } from "@/context/AuthContext.d";
 import axiosInstance from "@/utils/axiosInstance";
 import { TiDelete } from "react-icons/ti";
 import { Typography } from "antd/lib";
-const { Text } = Typography;
+const { Text, Title } = Typography;
+import { FaUsers } from "react-icons/fa6";
 
 interface DataType {
   key: string;
@@ -55,21 +56,28 @@ const UserTable: React.FC<UserTableProps> = ({ getAllUsers }) => {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <Text>{text}</Text>,
+      width: 200,
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      render: (text) => <Text>{text}</Text>,
+      width: 200,
     },
     {
       title: "Role",
       dataIndex: "role",
+      width: 90,
       key: "role",
+      render: (text) => <Text>{text}</Text>,
     },
     {
       title: "Action",
       key: "action",
+      width: 100,
+
       render: (_, record) => (
         <Space size="middle">
           <Button danger onClick={() => deleteUserHandler(record.key)}>
@@ -92,12 +100,14 @@ const UserTable: React.FC<UserTableProps> = ({ getAllUsers }) => {
   }, []);
   return (
     <Table
+      style={{ marginTop: "20px" }}
       loading={loading}
       columns={columns}
       pagination={false}
       dataSource={data}
       virtual
       bordered
+      title={() => <Text strong>Users Table</Text>}
     />
   );
 };
