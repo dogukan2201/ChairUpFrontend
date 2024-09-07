@@ -6,6 +6,7 @@ export interface UserDataType {
 }
 export interface UserListType {
   _id: string;
+  role: string;
   firstName: string;
   lastName: string;
   email: string;

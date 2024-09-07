@@ -19,7 +19,7 @@ const items: MenuItem[] = [
   { key: "3", icon: <PiCoffeeBeanFill />, label: "Products" },
   { key: "4", icon: <HiArchiveBox />, label: "Stock" },
 ];
-const adminPage = () => {
+const AdminPage = () => {
   const [current, setCurrent] = useState("1");
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
@@ -45,4 +45,4 @@ const adminPage = () => {
   );
 };
 
-export default adminPage;
+export default AdminPage;
