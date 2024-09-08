@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   };
   const getUser = async () => {
     try {
-      const response = await axiosInstance.get("/user");
+      const response = await axiosInstance.get("/api/users/user");
       if (response.data && response.data.user) {
         setUser(response.data.user);
       }
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     }
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("/api/users/login", {
         email: email,
         password: password,
       });
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     password: string
   ) => {
     try {
-      const response = await axiosInstance.post("/signup", {
+      const response = await axiosInstance.post("/api/users/signup", {
         firstName,
         lastName,
         email,
