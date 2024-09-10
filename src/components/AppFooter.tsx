@@ -13,7 +13,7 @@ const AppFooter: React.FC = () => {
       </Col>
       <Col {...twoColumn}>
         <Flex justify="end" style={{ height: "%100" }}>
-          <Text>Dogukan Ozturk</Text>
+          <Text>EGG Solutions</Text>
         </Flex>
       </Col>
     </Row>

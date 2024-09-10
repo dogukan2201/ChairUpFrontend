@@ -26,20 +26,12 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [api, contextHolder] = notification.useNotification();
 
-  const openNotificationWithIcon = (type: NotificationType) => {
-    api[type]({
-      message: "Notification Title",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-    });
-  };
   const getUser = async () => {
     try {
-      const response = await axiosInstance.get("/api/users/user");
-      if (response.data && response.data.user) {
-        setUser(response.data.user);
+      const response = await axiosInstance.get("/api/customers/customer");
+      if (response.data && response.data.customer) {
+        setUser(response.data.customer);
       }
     } catch (error: unknown) {
       if ((error as AxiosError).response?.status === 401) {
@@ -48,25 +40,20 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     }
   };
-
   useEffect(() => {
     getUser();
-    return () => {};
   }, []);
 
   const userLogin = async (email: string, password: string) => {
-    {
-      contextHolder;
-    }
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/api/users/login", {
+      const response = await axiosInstance.post("/api/customers/login", {
         email: email,
         password: password,
       });
+
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
-        await openNotificationWithIcon("success");
         router.push("/");
       }
     } catch (error) {
@@ -80,28 +67,33 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     firstName: string,
     lastName: string,
     email: string,
+    phoneNumber: string,
     password: string
   ) => {
     try {
-      const response = await axiosInstance.post("/api/users/signup", {
+      setLoading(true);
+      const response = await axiosInstance.post("/api/customers/signup", {
         firstName,
         lastName,
+        phoneNumber,
         email,
         password,
       });
+
       if (!response.data || !response.data.accessToken) {
         console.log("Error:", response.data);
+        return;
       }
-      if (response.data && response.data.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
-        router.push("/");
-      }
+
+      localStorage.setItem("token", response.data.accessToken);
+      router.push("/");
     } catch (error) {
-      console.log("Error", error);
+      console.log("Error:", error);
     } finally {
       setLoading(false);
     }
   };
+
   const userLogout = async () => {
     try {
       setLoading(true);
@@ -114,6 +106,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
+
   const contextValue = {
     user,
     userLogin,

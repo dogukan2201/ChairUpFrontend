@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Row,
   Col,
@@ -12,18 +12,18 @@ import {
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/hooks/useAuth";
-import axiosInstance from "@/utils/axiosInstance";
 const { Title } = Typography;
 
 type SignUpType = {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password: string;
 };
 
 const SignUpPage = () => {
-  const { userSignUp, user, loading } = useAuth();
+  const { userSignUp, loading } = useAuth();
 
   const onSubmit: FormProps<SignUpType>["onFinish"] = async (values) => {
     try {
@@ -31,6 +31,7 @@ const SignUpPage = () => {
         values.firstName,
         values.lastName,
         values.email,
+        values.phoneNumber,
         values.password
       );
     } catch (error) {
@@ -119,6 +120,15 @@ const SignUpPage = () => {
                   required: true,
                   message: "Please input your E-mail!",
                 },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<SignUpType>
+              label="Phone Number:"
+              name="phoneNumber"
+              rules={[
+                { required: true, message: "Please input your phone number!" },
               ]}
             >
               <Input />

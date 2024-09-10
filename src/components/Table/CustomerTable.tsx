@@ -11,15 +11,16 @@ interface DataType {
   key: string;
   fullName: string;
   email: string;
+  phoneNumber: string;
   role: string;
 }
 
-interface UserTableProps {
+interface CustomerTableProps {
   getAllUsers: () => void;
   deleteUser: (id: string) => void;
 }
 
-const UserTable: React.FC<UserTableProps> = () => {
+const CustomerTable: React.FC<CustomerTableProps> = () => {
   const [users, setUsers] = useState<UserListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,9 +45,10 @@ const UserTable: React.FC<UserTableProps> = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/users/all");
-      if (response.data && response.data.users) {
-        setUsers(response.data.users);
+      const response = await axiosInstance.get("/api/customers/all");
+      if (response.data && response.data.customers) {
+        setUsers(response.data.customers);
+        console.log(response.data.customers);
       }
     } catch (error) {
       console.error("Error fetching users", error);
@@ -59,9 +61,9 @@ const UserTable: React.FC<UserTableProps> = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.delete(
-        `/api/users/deleteUser/${id}`
+        `/api/customers/delete/${id}`
       );
-      if (response.data.message === "User Deleted") {
+      if (response.data.message === "Customer Deleted") {
         fetchUsers();
       }
     } catch (error) {
@@ -85,16 +87,22 @@ const UserTable: React.FC<UserTableProps> = () => {
       render: (text) => <Text>{text}</Text>,
     },
     {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+      render: (text) => <Text>{text}</Text>,
+    },
+    {
       title: "Role",
       dataIndex: "role",
-      width: 90,
+      width: 150,
       key: "role",
       render: (text) => <Text>{text}</Text>,
     },
     {
       title: "Action",
       key: "action",
-      width: 100,
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
           <Button danger onClick={() => showModal(record)}>
@@ -109,6 +117,7 @@ const UserTable: React.FC<UserTableProps> = () => {
     key: user._id,
     fullName: `${user.firstName} ${user.lastName}`,
     role: user.role,
+    phoneNumber: user.phoneNumber,
     email: user.email,
   }));
 
@@ -134,10 +143,10 @@ const UserTable: React.FC<UserTableProps> = () => {
         dataSource={data}
         virtual
         bordered
-        title={() => <Text strong>Users Table</Text>}
+        title={() => <Text strong>Customer Table</Text>}
       />
     </>
   );
 };
 
-export default UserTable;
+export default CustomerTable;

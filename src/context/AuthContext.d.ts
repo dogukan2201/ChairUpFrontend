@@ -2,6 +2,7 @@ export interface UserDataType {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password: string;
 }
 export interface UserListType {
@@ -9,6 +10,7 @@ export interface UserListType {
   role: string;
   firstName: string;
   lastName: string;
+  phoneNumber: string;
   email: string;
 }
 
@@ -20,6 +22,7 @@ export interface AuthContextType {
     firstName: string,
     lastName: string,
     email: string,
+    phoneNumber: string,
     password: string
   ) => Promise<void>;
   loading: boolean;
