@@ -19,12 +19,12 @@ type LoginType = {
   password: string;
 };
 
-const LoginPage = () => {
-  const { userLogin, loading } = useAuth();
+const AdminLogin = () => {
+  const { loading, adminLogin } = useAuth();
 
   const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {
-      await userLogin(values.email, values.password);
+      await adminLogin(values.email, values.password);
     } catch (error) {
       console.log("Error:", error);
     }
@@ -40,7 +40,7 @@ const LoginPage = () => {
     <Row style={{ height: "100%" }} align={"middle"}>
       <Col {...twoColumn} xs={0} sm={0}>
         <Flex justify="center" align="center">
-          <Image src="/svg/loginImage3.svg" preview={false} width={600} />
+          <Image src="/svg/admin.svg" preview={false} width={600} />
         </Flex>
       </Col>
       <Col {...twoColumn} xs={24} sm={24}>
@@ -59,7 +59,7 @@ const LoginPage = () => {
                 textAlign: "center",
               }}
             >
-              Login
+              Admin Login
               <span
                 style={{
                   backgroundColor: "green",
@@ -117,4 +117,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLogin;

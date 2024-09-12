@@ -17,7 +17,12 @@ export interface UserListType {
 export interface AuthContextType {
   user: UserDataType | null;
   userLogin: (email: string, password: string) => Promise<void>;
+  customerLogin: (email: string, password: string) => Promise<void>;
+  customerDelete: (id: string) => Promise<void>;
+  adminLogin: (email: string, password: string) => Promise<void>;
+  getAdmin: () => void;
   userLogout: () => void;
+  userDelete: (id: string) => Promise<void>;
   userSignUp: (
     firstName: string,
     lastName: string,

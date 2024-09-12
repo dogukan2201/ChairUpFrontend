@@ -5,6 +5,7 @@ import type { UserListType } from "@/context/AuthContext.d";
 import axiosInstance from "@/utils/axiosInstance";
 import { TiDelete } from "react-icons/ti";
 import { Typography } from "antd/lib";
+import { useAuth } from "@/hooks/useAuth";
 const { Text } = Typography;
 
 interface DataType {
@@ -12,7 +13,6 @@ interface DataType {
   fullName: string;
   email: string;
   phoneNumber: string;
-  role: string;
 }
 
 interface CustomerTableProps {
@@ -21,6 +21,7 @@ interface CustomerTableProps {
 }
 
 const CustomerTable: React.FC<CustomerTableProps> = () => {
+  const { userDelete, customerDelete } = useAuth();
   const [users, setUsers] = useState<UserListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,44 +31,29 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
     setSelectedUser(record);
     setIsModalOpen(true);
   };
-
-  const handleOk = () => {
+  const handleOk = async () => {
     if (selectedUser) {
-      deleteUserHandler(selectedUser.key);
+      await customerDelete(selectedUser.key);
+      fetchCustomers();
     }
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const fetchUsers = async () => {
+  const fetchCustomers = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/customers/all");
+      const response = await axiosInstance.get("/api/admins/allCustomers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data && response.data.customers) {
         setUsers(response.data.customers);
-        console.log(response.data.customers);
       }
     } catch (error) {
       console.error("Error fetching users", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteUserHandler = async (id: string) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.delete(
-        `/api/customers/delete/${id}`
-      );
-      if (response.data.message === "Customer Deleted") {
-        fetchUsers();
-      }
-    } catch (error) {
-      console.error("Error deleting user", error);
     } finally {
       setLoading(false);
     }
@@ -93,13 +79,6 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
       render: (text) => <Text>{text}</Text>,
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      width: 150,
-      key: "role",
-      render: (text) => <Text>{text}</Text>,
-    },
-    {
       title: "Action",
       key: "action",
       width: 200,
@@ -116,13 +95,12 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
   const data: DataType[] = users.map((user: UserListType) => ({
     key: user._id,
     fullName: `${user.firstName} ${user.lastName}`,
-    role: user.role,
     phoneNumber: user.phoneNumber,
     email: user.email,
   }));
 
   useEffect(() => {
-    fetchUsers();
+    fetchCustomers();
   }, []);
 
   return (
