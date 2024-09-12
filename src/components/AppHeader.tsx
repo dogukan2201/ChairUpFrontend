@@ -25,7 +25,7 @@ const AppHeader: React.FC = () => {
           justify="end"
           align="center"
         >
-          {user && (
+          {user ? (
             <>
               <Avatar size={"large"} src="/svg/user.svg" />
               <Text style={{ color: "white", paddingRight: "10px" }}>
@@ -34,7 +34,14 @@ const AppHeader: React.FC = () => {
               <Button type="primary" danger onClick={userLogout}>
                 Logout
                 <IoMdLogOut size={20} />
+                <Button href="/admin">Admin Panel</Button>
               </Button>
+            </>
+          ) : (
+            <>
+              <Button href="/login/admin">Admin Login</Button>
+              <Button href="/login/customer">Customer Login</Button>
+              <Button href="/admin">Admin Panel</Button>
             </>
           )}
         </Flex>
