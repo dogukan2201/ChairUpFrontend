@@ -23,7 +23,7 @@ const items: MenuItem[] = [
 const AdminPage: React.FC = () => {
   const [current, setCurrent] = useState("1");
   const router = useRouter();
-  const { getAdmin } = useAuth();
+  const { getAdmin, role } = useAuth();
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
@@ -37,6 +37,11 @@ const AdminPage: React.FC = () => {
       getAdmin();
     }
   }, [router]);
+  useEffect(() => {
+    if (localStorage.getItem("role") !== "Admin") {
+      router.push("/login/admin");
+    }
+  }, []);
 
   return (
     <Card style={{ width: "100%", height: "100%" }}>

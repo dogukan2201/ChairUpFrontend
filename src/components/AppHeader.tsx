@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col, Image, Flex, Avatar, Typography, Button } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 const { Text, Title } = Typography;
 import { IoMdLogOut } from "react-icons/io";
 import { useAuth } from "@/hooks/useAuth";
 const AppHeader: React.FC = () => {
-  const { user, userLogout } = useAuth();
+  const { user, userLogout, getAdmin, getCustomer } = useAuth();
   const fullName = user?.firstName.concat(" ", user?.lastName);
 
   return (
@@ -34,8 +34,8 @@ const AppHeader: React.FC = () => {
               <Button type="primary" danger onClick={userLogout}>
                 Logout
                 <IoMdLogOut size={20} />
-                <Button href="/admin">Admin Panel</Button>
               </Button>
+              <Button href="/admin">Admin Panel</Button>
             </>
           ) : (
             <>

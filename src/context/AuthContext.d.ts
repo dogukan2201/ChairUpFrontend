@@ -16,13 +16,13 @@ export interface UserListType {
 
 export interface AuthContextType {
   user: UserDataType | null;
-  userLogin: (email: string, password: string) => Promise<void>;
+  role: string | null;
   customerLogin: (email: string, password: string) => Promise<void>;
   customerDelete: (id: string) => Promise<void>;
   adminLogin: (email: string, password: string) => Promise<void>;
   getAdmin: () => void;
+  getCustomer: () => void;
   userLogout: () => void;
-  userDelete: (id: string) => Promise<void>;
   userSignUp: (
     firstName: string,
     lastName: string,
@@ -31,7 +31,6 @@ export interface AuthContextType {
     password: string
   ) => Promise<void>;
   loading: boolean;
-  getUser: () => void;
 }
 export interface ProviderProps {
   children: React.ReactNode;

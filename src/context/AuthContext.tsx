@@ -1,5 +1,4 @@
 import React, { useState, createContext, useEffect } from "react";
-import { notification } from "antd/lib";
 import type {
   UserDataType,
   ProviderProps,
@@ -12,88 +11,24 @@ import { AxiosError } from "axios";
 
 const initialValues = {
   user: null,
-  loading: false,
-  userLogin: () => Promise.resolve(),
+  role: null,
   customerLogin: () => Promise.resolve(),
   customerDelete: () => Promise.resolve(),
   adminLogin: () => Promise.resolve(),
   getAdmin: () => Promise.resolve(),
+  getCustomer: () => Promise.resolve(),
   userLogout: () => Promise.resolve(),
   userSignUp: () => Promise.resolve(),
   userDelete: () => Promise.resolve(),
-  getUser: () => Promise.resolve(),
 };
 
 const AuthContext = createContext<AuthContextType>(initialValues);
 
 export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDataType | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-
-  const getUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
-
-      if (!token || !role) {
-        throw new Error("Token or role is missing");
-      }
-      const response = await axiosInstance.get(`/api/${role}s/${role}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data && response.data[role]) {
-        setUser(response.data[role]);
-      }
-    } catch (error: unknown) {
-      if ((error as AxiosError).response?.status === 401) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        setUser(null);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-  const userLogin = async (email: string, password: string) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.post("/api/admins/login", {
-        email: email,
-        password: password,
-      });
-
-      if (response.data && response.data.accessToken) {
-        getUser();
-        localStorage.setItem("token", response.data.accessToken);
-        localStorage.setItem("role", response.data.role);
-        router.push("/");
-      }
-    } catch (error) {
-      console.log("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const userDelete = async (id: string) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.delete(
-        `/api/customers/delete/${id}`
-      );
-      if (response.data.message === "Customer Deleted") {
-        getUser();
-      }
-    } catch (error) {
-      console.log("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const userSignUp = async (
     firstName: string,
     lastName: string,
@@ -143,7 +78,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
-        getAdmin();
+        setRole(response.data.role);
+        localStorage.setItem("role", response.data.role);
         router.push("/admin");
       }
     } catch (error) {
@@ -152,11 +88,10 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
   const getAdmin = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axiosInstance.get(`/api/admins/admin`, {
+      const response = await axiosInstance.get("/api/admins/admin", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -168,6 +103,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       if ((error as AxiosError).response?.status === 401) {
         localStorage.removeItem("token");
         setUser(null);
+      } else {
+        console.error("Error fetching admin:", error);
       }
     }
   };
@@ -191,7 +128,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       );
 
       if (response.data.error === false) {
-        await getUser();
+        console.log("Customer Deleted Successfully");
       }
     } catch (error) {
       console.log("Error:", error);
@@ -199,7 +136,26 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
+  const getCustomer = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.get("/api/customers/customer", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data && response.data.customer) {
+        setUser(response.data.customer);
+      }
+    } catch (error: unknown) {
+      if ((error as AxiosError).response?.status === 401) {
+        localStorage.removeItem("token");
+        setUser(null);
+      } else {
+        console.error("Error fetching customer:", error);
+      }
+    }
+  };
   const customerLogin = async (email: string, password: string) => {
     try {
       setLoading(true);
@@ -210,6 +166,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
+        setRole(response.data.role);
         localStorage.setItem("role", response.data.role);
         router.push("/");
       }
@@ -221,16 +178,15 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   };
   const contextValue = {
     user,
-    userLogin,
+    role,
     userLogout,
     userSignUp,
-    userDelete,
     adminLogin,
     getAdmin,
+    getCustomer,
     customerLogin,
     customerDelete,
     loading,
-    getUser,
   };
 
   return (

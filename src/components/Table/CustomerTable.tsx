@@ -21,7 +21,7 @@ interface CustomerTableProps {
 }
 
 const CustomerTable: React.FC<CustomerTableProps> = () => {
-  const { userDelete, customerDelete } = useAuth();
+  const { customerDelete } = useAuth();
   const [users, setUsers] = useState<UserListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
