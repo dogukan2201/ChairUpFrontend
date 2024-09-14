@@ -17,7 +17,7 @@ const initialValues = {
   getAdmin: () => Promise.resolve(),
   getCustomer: () => Promise.resolve(),
   userLogout: () => Promise.resolve(),
-  userSignUp: () => Promise.resolve(),
+  customerSignUp: () => Promise.resolve(),
   userDelete: () => Promise.resolve(),
   loading: false,
 };
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const userSignUp = async (
+  const customerSignUp = async (
     firstName: string,
     lastName: string,
     email: string,
@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       if (response.data.accessToken) {
-        router.push("/login");
+        router.push("/login/customer");
       }
     } catch (error) {
       console.log("Error:", error);
@@ -54,7 +54,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
   const userLogout = async () => {
     try {
       setLoading(true);
@@ -76,7 +75,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       if (response.data && response.data.accessToken) {
-        setUser(response.data.admin);
         localStorage.setItem("token", response.data.accessToken);
         router.push("/admin");
       }
@@ -99,10 +97,10 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     } catch (error: unknown) {
       if ((error as AxiosError).response?.status === 401) {
-        userLogout();
+        await userLogout();
         router.push("/login/admin");
       } else {
-        userLogout();
+        await userLogout();
         console.error("Error fetching admin:", error);
         router.push("/login/admin");
       }
@@ -148,10 +146,12 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     } catch (error: unknown) {
       if ((error as AxiosError).response?.status === 401) {
-        localStorage.removeItem("token");
-        setUser(null);
+        await userLogout();
+        router.push("/login/customer");
       } else {
         console.error("Error fetching customer:", error);
+        await userLogout();
+        router.push("/login/customer");
       }
     }
   };
@@ -176,7 +176,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const contextValue = {
     user,
     userLogout,
-    userSignUp,
+    customerSignUp,
     adminLogin,
     getAdmin,
     getCustomer,

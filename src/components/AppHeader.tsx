@@ -5,7 +5,7 @@ const { Text, Title } = Typography;
 import { IoMdLogOut } from "react-icons/io";
 import { useAuth } from "@/hooks/useAuth";
 const AppHeader: React.FC = () => {
-  const { user, userLogout, getAdmin } = useAuth();
+  const { user, userLogout } = useAuth();
   const fullName = user?.firstName.concat(" ", user?.lastName);
   const userRole = user?.role;
 

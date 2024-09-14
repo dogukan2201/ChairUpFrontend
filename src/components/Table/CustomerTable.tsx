@@ -22,18 +22,20 @@ interface CustomerTableProps {
 
 const CustomerTable: React.FC<CustomerTableProps> = () => {
   const { customerDelete } = useAuth();
-  const [users, setUsers] = useState<UserListType[]>([]);
+  const [customers, setCustomers] = useState<UserListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<DataType | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<DataType | null>(
+    null
+  );
 
   const showModal = (record: DataType) => {
-    setSelectedUser(record);
+    setSelectedCustomer(record);
     setIsModalOpen(true);
   };
   const handleOk = async () => {
-    if (selectedUser) {
-      await customerDelete(selectedUser.key);
+    if (selectedCustomer) {
+      await customerDelete(selectedCustomer.key);
       fetchCustomers();
     }
     setIsModalOpen(false);
@@ -50,7 +52,7 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
         },
       });
       if (response.data && response.data.customers) {
-        setUsers(response.data.customers);
+        setCustomers(response.data.customers);
       }
     } catch (error) {
       console.error("Error fetching users", error);
@@ -92,7 +94,7 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
       ),
     },
   ];
-  const data: DataType[] = users.map((user: UserListType) => ({
+  const data: DataType[] = customers.map((user: UserListType) => ({
     key: user._id,
     fullName: `${user.firstName} ${user.lastName}`,
     phoneNumber: user.phoneNumber,

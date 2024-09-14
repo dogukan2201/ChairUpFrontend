@@ -23,11 +23,11 @@ type SignUpType = {
 };
 
 const SignUpPage = () => {
-  const { userSignUp, loading } = useAuth();
+  const { customerSignUp, loading } = useAuth();
 
   const onSubmit: FormProps<SignUpType>["onFinish"] = async (values) => {
     try {
-      await userSignUp(
+      await customerSignUp(
         values.firstName,
         values.lastName,
         values.email,

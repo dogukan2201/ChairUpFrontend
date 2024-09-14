@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Row,
   Col,
@@ -12,15 +12,15 @@ import {
 import type { FormProps } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/hooks/useAuth";
-
 const { Title } = Typography;
+
 type LoginType = {
   email: string;
   password: string;
 };
 
 const AdminLogin = () => {
-  const { loading, adminLogin, userLogout } = useAuth();
+  const { loading, adminLogin } = useAuth();
 
   const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {

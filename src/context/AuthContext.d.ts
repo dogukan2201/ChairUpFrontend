@@ -23,7 +23,7 @@ export interface AuthContextType {
   getAdmin: () => void;
   getCustomer: () => void;
   userLogout: () => void;
-  userSignUp: (
+  customerSignUp: (
     firstName: string,
     lastName: string,
     email: string,

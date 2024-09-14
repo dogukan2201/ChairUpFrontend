@@ -9,7 +9,6 @@ import CustomerTable from "@/components/Table/CustomerTable";
 import EmployeeTable from "@/components/Table/EmployeeTable";
 import CafeOwnerTable from "@/components/Table/CafeOwnerTable";
 import StockTable from "@/components/Table/StockTable";
-import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -22,9 +21,8 @@ const items: MenuItem[] = [
 ];
 const AdminPage: React.FC = () => {
   const [current, setCurrent] = useState("1");
-  const router = useRouter();
-  const { getAdmin, userLogout, user } = useAuth();
-  const userRole = user?.role;
+  const { getAdmin } = useAuth();
+
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
