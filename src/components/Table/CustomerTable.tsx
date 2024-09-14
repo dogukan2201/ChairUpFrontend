@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Button, Modal } from "antd/lib";
 import type { TableProps } from "antd/lib";
-import type { UserListType } from "@/context/AuthContext.d";
+import type { CustomerListType } from "@/context/AuthContext.d";
 import axiosInstance from "@/utils/axiosInstance";
 import { TiDelete } from "react-icons/ti";
 import { Typography } from "antd/lib";
@@ -22,7 +22,7 @@ interface CustomerTableProps {
 
 const CustomerTable: React.FC<CustomerTableProps> = () => {
   const { customerDelete } = useAuth();
-  const [customers, setCustomers] = useState<UserListType[]>([]);
+  const [customers, setCustomers] = useState<CustomerListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<DataType | null>(
@@ -94,7 +94,7 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
       ),
     },
   ];
-  const data: DataType[] = customers.map((user: UserListType) => ({
+  const data: DataType[] = customers.map((user: CustomerListType) => ({
     key: user._id,
     fullName: `${user.firstName} ${user.lastName}`,
     phoneNumber: user.phoneNumber,

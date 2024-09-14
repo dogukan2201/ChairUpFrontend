@@ -6,7 +6,7 @@ export interface UserDataType {
   phoneNumber: string;
   password: string;
 }
-export interface UserListType {
+export interface CustomerListType {
   _id: string;
   role: string;
   firstName: string;
