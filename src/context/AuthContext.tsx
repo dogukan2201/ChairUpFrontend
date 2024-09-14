@@ -11,7 +11,6 @@ import { AxiosError } from "axios";
 
 const initialValues = {
   user: null,
-  role: null,
   customerLogin: () => Promise.resolve(),
   customerDelete: () => Promise.resolve(),
   adminLogin: () => Promise.resolve(),
@@ -20,13 +19,13 @@ const initialValues = {
   userLogout: () => Promise.resolve(),
   userSignUp: () => Promise.resolve(),
   userDelete: () => Promise.resolve(),
+  loading: false,
 };
 
 const AuthContext = createContext<AuthContextType>(initialValues);
 
 export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDataType | null>(null);
-  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const userSignUp = async (
@@ -77,9 +76,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       if (response.data && response.data.accessToken) {
+        setUser(response.data.admin);
         localStorage.setItem("token", response.data.accessToken);
-        setRole(response.data.role);
-        localStorage.setItem("role", response.data.role);
         router.push("/admin");
       }
     } catch (error) {
@@ -101,14 +99,15 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     } catch (error: unknown) {
       if ((error as AxiosError).response?.status === 401) {
-        localStorage.removeItem("token");
-        setUser(null);
+        userLogout();
+        router.push("/login/admin");
       } else {
+        userLogout();
         console.error("Error fetching admin:", error);
+        router.push("/login/admin");
       }
     }
   };
-
   const customerDelete = async (id: string) => {
     try {
       const token = localStorage.getItem("token");
@@ -166,8 +165,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
-        setRole(response.data.role);
-        localStorage.setItem("role", response.data.role);
         router.push("/");
       }
     } catch (error) {
@@ -178,7 +175,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   };
   const contextValue = {
     user,
-    role,
     userLogout,
     userSignUp,
     adminLogin,

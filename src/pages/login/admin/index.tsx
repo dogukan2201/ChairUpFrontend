@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Row,
   Col,
@@ -20,7 +20,7 @@ type LoginType = {
 };
 
 const AdminLogin = () => {
-  const { loading, adminLogin } = useAuth();
+  const { loading, adminLogin, userLogout } = useAuth();
 
   const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {

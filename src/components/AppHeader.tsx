@@ -5,8 +5,9 @@ const { Text, Title } = Typography;
 import { IoMdLogOut } from "react-icons/io";
 import { useAuth } from "@/hooks/useAuth";
 const AppHeader: React.FC = () => {
-  const { user, userLogout, getAdmin, getCustomer } = useAuth();
+  const { user, userLogout, getAdmin } = useAuth();
   const fullName = user?.firstName.concat(" ", user?.lastName);
+  const userRole = user?.role;
 
   return (
     <Row>
@@ -29,7 +30,9 @@ const AppHeader: React.FC = () => {
             <>
               <Avatar size={"large"} src="/svg/user.svg" />
               <Text style={{ color: "white", paddingRight: "10px" }}>
-                {fullName}
+                {`User:${fullName}`}
+                <br />
+                {`Role: ${userRole}`}
               </Text>
               <Button type="primary" danger onClick={userLogout}>
                 Logout

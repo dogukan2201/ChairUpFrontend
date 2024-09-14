@@ -2,6 +2,7 @@ export interface UserDataType {
   firstName: string;
   lastName: string;
   email: string;
+  role: string;
   phoneNumber: string;
   password: string;
 }
@@ -16,7 +17,6 @@ export interface UserListType {
 
 export interface AuthContextType {
   user: UserDataType | null;
-  role: string | null;
   customerLogin: (email: string, password: string) => Promise<void>;
   customerDelete: (id: string) => Promise<void>;
   adminLogin: (email: string, password: string) => Promise<void>;
