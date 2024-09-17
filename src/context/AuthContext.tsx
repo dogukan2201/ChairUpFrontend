@@ -13,6 +13,7 @@ const initialValues = {
   user: null,
   customerLogin: () => Promise.resolve(),
   customerDelete: () => Promise.resolve(),
+  cafeOwnerDelete: () => Promise.resolve(),
   adminLogin: () => Promise.resolve(),
   getAdmin: () => Promise.resolve(),
   getCustomer: () => Promise.resolve(),
@@ -106,6 +107,32 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     }
   };
+  const cafeOwnerDelete = async (id: string) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Token is missing");
+      }
+      setLoading(true);
+      const response = await axiosInstance.delete(
+        `/api/admins/deleteCafeOwner/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.error === false) {
+        console.log("Cafe owner deleted Successfully");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const customerDelete = async (id: string) => {
     try {
       const token = localStorage.getItem("token");
@@ -182,6 +209,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     getCustomer,
     customerLogin,
     customerDelete,
+    cafeOwnerDelete,
     loading,
   };
 

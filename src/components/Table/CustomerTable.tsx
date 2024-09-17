@@ -113,7 +113,7 @@ const CustomerTable: React.FC<CustomerTableProps> = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Text>Are you sure you want to delete this user?</Text>
+        <Text>Are you sure you want to delete this customer?</Text>
       </Modal>
       <Table
         style={{ marginTop: "20px" }}
