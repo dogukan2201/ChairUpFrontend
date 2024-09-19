@@ -1,17 +1,13 @@
 import React, { useEffect } from "react";
 import Card from "antd/lib/card/Card";
 import { useAuth } from "@/hooks/useAuth";
-import GoogleMaps from "@/components/GoogleMap";
 const Home = () => {
-  const { getUser } = useAuth();
+  const { getCustomer } = useAuth();
   useEffect(() => {
-    getUser();
+    getCustomer();
   }, []);
-  return (
-    <Card style={{ height: "100%" }}>
-      <GoogleMaps />
-    </Card>
-  );
+
+  return <Card style={{ height: "100%" }}>Welcome To Chair Up</Card>;
 };
 
 export default Home;

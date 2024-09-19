@@ -19,12 +19,12 @@ type LoginType = {
   password: string;
 };
 
-const LoginPage = () => {
-  const { userLogin, loading } = useAuth();
+const CustomerLogin = () => {
+  const { loading, customerLogin } = useAuth();
 
   const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {
-      await userLogin(values.email, values.password);
+      await customerLogin(values.email, values.password);
     } catch (error) {
       console.log("Error:", error);
     }
@@ -59,7 +59,7 @@ const LoginPage = () => {
                 textAlign: "center",
               }}
             >
-              Login
+              Customer Login
               <span
                 style={{
                   backgroundColor: "green",
@@ -117,4 +117,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default CustomerLogin;

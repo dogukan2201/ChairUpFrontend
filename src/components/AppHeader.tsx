@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col, Image, Flex, Avatar, Typography, Button } from "antd/lib";
 import { twoColumn } from "@/config/bootstrap";
 const { Text, Title } = Typography;
@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 const AppHeader: React.FC = () => {
   const { user, userLogout } = useAuth();
   const fullName = user?.firstName.concat(" ", user?.lastName);
+  const userRole = user?.role;
 
   return (
     <Row>
@@ -25,16 +26,25 @@ const AppHeader: React.FC = () => {
           justify="end"
           align="center"
         >
-          {user && (
+          {user ? (
             <>
               <Avatar size={"large"} src="/svg/user.svg" />
               <Text style={{ color: "white", paddingRight: "10px" }}>
-                {fullName}
+                {`User:${fullName}`}
+                <br />
+                {`Role: ${userRole}`}
               </Text>
               <Button type="primary" danger onClick={userLogout}>
                 Logout
                 <IoMdLogOut size={20} />
               </Button>
+              <Button href="/admin">Admin Panel</Button>
+            </>
+          ) : (
+            <>
+              <Button href="/login/admin">Admin Login</Button>
+              <Button href="/login/customer">Customer Login</Button>
+              <Button href="/admin">Admin Panel</Button>
             </>
           )}
         </Flex>

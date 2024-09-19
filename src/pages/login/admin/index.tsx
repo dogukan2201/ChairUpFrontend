@@ -14,32 +14,23 @@ import { twoColumn } from "@/config/bootstrap";
 import { useAuth } from "@/hooks/useAuth";
 const { Title } = Typography;
 
-type SignUpType = {
-  firstName: string;
-  lastName: string;
+type LoginType = {
   email: string;
-  phoneNumber: string;
   password: string;
 };
 
-const SignUpPage = () => {
-  const { customerSignUp, loading } = useAuth();
+const AdminLogin = () => {
+  const { loading, adminLogin } = useAuth();
 
-  const onSubmit: FormProps<SignUpType>["onFinish"] = async (values) => {
+  const onSubmit: FormProps<LoginType>["onFinish"] = async (values) => {
     try {
-      await customerSignUp(
-        values.firstName,
-        values.lastName,
-        values.email,
-        values.phoneNumber,
-        values.password
-      );
+      await adminLogin(values.email, values.password);
     } catch (error) {
       console.log("Error:", error);
     }
   };
 
-  const onFinishFailed: FormProps<SignUpType>["onFinishFailed"] = (
+  const onFinishFailed: FormProps<LoginType>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.log("Failed:", errorInfo);
@@ -49,7 +40,7 @@ const SignUpPage = () => {
     <Row style={{ height: "100%" }} align={"middle"}>
       <Col {...twoColumn} xs={0} sm={0}>
         <Flex justify="center" align="center">
-          <Image src="/svg/sign.svg" preview={false} width={600} />
+          <Image src="/svg/admin.svg" preview={false} width={600} />
         </Flex>
       </Col>
       <Col {...twoColumn} xs={24} sm={24}>
@@ -57,17 +48,18 @@ const SignUpPage = () => {
           <Flex
             justify="center"
             align="center"
-            style={{ alignItems: "center" }}
+            style={{ paddingBottom: "20px" }}
           >
             <Title
               level={2}
               style={{
-                color: "green",
+                borderRadius: "15px",
                 width: "100%",
+                color: "green",
                 textAlign: "center",
               }}
             >
-              SignUp
+              Admin Login
               <span
                 style={{
                   backgroundColor: "green",
@@ -82,59 +74,22 @@ const SignUpPage = () => {
 
           <Form
             layout="vertical"
-            name="signUpFrom"
+            name="loginForm"
             onFinish={onSubmit}
             onFinishFailed={onFinishFailed}
             style={{ width: "50%" }}
           >
-            <Form.Item<SignUpType>
-              label="First Name:"
-              name="firstName"
-              rules={[
-                { required: true, message: "Please input your first name!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item<SignUpType>
-              label="Last Name:"
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your last name!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item<SignUpType>
-              label="Email:"
+            <Form.Item<LoginType>
+              label="Email"
               name="email"
               rules={[
-                {
-                  type: "email",
-                  message: "The input is not valid E-mail!",
-                },
-                {
-                  required: true,
-                  message: "Please input your E-mail!",
-                },
+                { required: true, message: "Please input your username!" },
               ]}
             >
               <Input />
             </Form.Item>
-            <Form.Item<SignUpType>
-              label="Phone Number:"
-              name="phoneNumber"
-              rules={[
-                { required: true, message: "Please input your phone number!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item<SignUpType>
-              label="Password:"
+            <Form.Item<LoginType>
+              label="Password"
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
@@ -151,7 +106,7 @@ const SignUpPage = () => {
                   block
                   loading={loading}
                 >
-                  Sign Up
+                  Login
                 </Button>
               </Flex>
             </Form.Item>
@@ -162,4 +117,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default AdminLogin;

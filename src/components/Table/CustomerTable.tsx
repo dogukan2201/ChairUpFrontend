@@ -1,71 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Button, Modal } from "antd/lib";
 import type { TableProps } from "antd/lib";
-import type { UserListType } from "@/context/AuthContext.d";
+import type { CustomerListType } from "@/context/AuthContext.d";
 import axiosInstance from "@/utils/axiosInstance";
 import { TiDelete } from "react-icons/ti";
 import { Typography } from "antd/lib";
+import { useAuth } from "@/hooks/useAuth";
 const { Text } = Typography;
 
 interface DataType {
   key: string;
   fullName: string;
   email: string;
-  role: string;
+  phoneNumber: string;
 }
 
-interface UserTableProps {
+interface CustomerTableProps {
   getAllUsers: () => void;
   deleteUser: (id: string) => void;
 }
 
-const UserTable: React.FC<UserTableProps> = () => {
-  const [users, setUsers] = useState<UserListType[]>([]);
+const CustomerTable: React.FC<CustomerTableProps> = () => {
+  const { customerDelete } = useAuth();
+  const [customers, setCustomers] = useState<CustomerListType[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<DataType | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<DataType | null>(
+    null
+  );
 
   const showModal = (record: DataType) => {
-    setSelectedUser(record);
+    setSelectedCustomer(record);
     setIsModalOpen(true);
   };
-
-  const handleOk = () => {
-    if (selectedUser) {
-      deleteUserHandler(selectedUser.key);
+  const handleOk = async () => {
+    if (selectedCustomer) {
+      await customerDelete(selectedCustomer.key);
+      fetchCustomers();
     }
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const fetchUsers = async () => {
+  const fetchCustomers = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/users/all");
-      if (response.data && response.data.users) {
-        setUsers(response.data.users);
+      const response = await axiosInstance.get("/api/admins/allCustomers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (response.data && response.data.customers) {
+        setCustomers(response.data.customers);
       }
     } catch (error) {
       console.error("Error fetching users", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteUserHandler = async (id: string) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.delete(
-        `/api/users/deleteUser/${id}`
-      );
-      if (response.data.message === "User Deleted") {
-        fetchUsers();
-      }
-    } catch (error) {
-      console.error("Error deleting user", error);
     } finally {
       setLoading(false);
     }
@@ -85,16 +75,15 @@ const UserTable: React.FC<UserTableProps> = () => {
       render: (text) => <Text>{text}</Text>,
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      width: 90,
-      key: "role",
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
       render: (text) => <Text>{text}</Text>,
     },
     {
       title: "Action",
       key: "action",
-      width: 100,
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
           <Button danger onClick={() => showModal(record)}>
@@ -105,15 +94,15 @@ const UserTable: React.FC<UserTableProps> = () => {
       ),
     },
   ];
-  const data: DataType[] = users.map((user: UserListType) => ({
+  const data: DataType[] = customers.map((user: CustomerListType) => ({
     key: user._id,
     fullName: `${user.firstName} ${user.lastName}`,
-    role: user.role,
+    phoneNumber: user.phoneNumber,
     email: user.email,
   }));
 
   useEffect(() => {
-    fetchUsers();
+    fetchCustomers();
   }, []);
 
   return (
@@ -124,7 +113,7 @@ const UserTable: React.FC<UserTableProps> = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Text>Are you sure you want to delete this user?</Text>
+        <Text>Are you sure you want to delete this customer?</Text>
       </Modal>
       <Table
         style={{ marginTop: "20px" }}
@@ -134,10 +123,10 @@ const UserTable: React.FC<UserTableProps> = () => {
         dataSource={data}
         virtual
         bordered
-        title={() => <Text strong>Users Table</Text>}
+        title={() => <Text strong>Customer Table</Text>}
       />
     </>
   );
 };
 
-export default UserTable;
+export default CustomerTable;
